@@ -44,17 +44,14 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
-    # contributed
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # third-party
-    # ...
-    # local
-    # ...
+    "myproject.apps.core",
+    "myproject.apps.ideas",
 ]
 
 MIDDLEWARE = [
@@ -125,7 +122,24 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = "en"
+
+LANGUAGES = [
+    ("bg", "Bulgarian"), ("hr", "Croatian"),
+    ("cs", "Czech"), ("da", "Danish"),
+    ("nl", "Dutch"), ("en", "English"),
+    ("et", "Estonian"), ("fi", "Finnish"),
+    ("fr", "French"), ("de", "German"),
+    ("el", "Greek"), ("hu", "Hungarian"),
+    ("ga", "Irish"), ("it", "Italian"),
+    ("lv", "Latvian"), ("lt", "Lithuanian"),
+    ("mt", "Maltese"), ("pl", "Polish"),
+    ("pt", "Portuguese"), ("ro", "Romanian"),
+    ("sk", "Slovak"), ("sl", "Slovene"),
+    ("es", "Spanish"), ("sv", "Swedish"),
+]
+
+
 
 TIME_ZONE = 'UTC'
 
