@@ -7,6 +7,7 @@ from myproject.apps.core.models import UrlBase, CreationModificationDateBase, Me
 from myproject.apps.core.model_fields import (
     MultilingualCharField,
     MultilingualTextField,
+    TranslatedField
 )
 
 
@@ -39,15 +40,37 @@ class Like(FavoriteObjectBase, OwnerBase):
                 object=self.content_object
             )
 
-class Idea(UrlBase, MetaTagsBase, CreationModificationDateBase):
-    title = MultilingualCharField(
+# class Idea(UrlBase, MetaTagsBase, CreationModificationDateBase):
+#     title = MultilingualCharField(
+#         _("Title"),
+#         max_length=200
+#     )
+#     content = MultilingualTextField(
+#         _("Content"),
+#     )
+#     # other fields…
+#     class Meta:
+#         verbose_name = _("Idea")
+#         verbose_name_plural = _("Ideas")
+
+#     def __str__(self):
+#         return self.title
+
+#     def get_url_path(self):
+#         return reverse("idea_details", kwargs={
+#             "idea_id": str(self.pk),
+#         })
+class Idea(models.Model):
+    title = models.CharField(
         _("Title"),
-        max_length=200
+        max_length=200,
     )
-    content = MultilingualTextField(
+    content = models.TextField(
         _("Content"),
     )
-    # other fields…
+    translated_title = TranslatedField("title")
+    translated_content = TranslatedField("content")
+
     class Meta:
         verbose_name = _("Idea")
         verbose_name_plural = _("Ideas")
@@ -55,7 +78,28 @@ class Idea(UrlBase, MetaTagsBase, CreationModificationDateBase):
     def __str__(self):
         return self.title
 
-    def get_url_path(self):
-        return reverse("idea_details", kwargs={
-            "idea_id": str(self.pk),
-        })
+class IdeaTranslations(models.Model):
+    idea = models.ForeignKey(
+        Idea,
+        verbose_name=_("Idea"),
+        on_delete=models.CASCADE,
+        related_name="translations",
+    )
+
+    language = models.CharField(_("Language"), max_length=7)
+    title = models.CharField(
+        _("Title"),
+        max_length=200,
+    )
+    content = models.TextField(
+        _("Content"),
+    )
+
+    class Meta:
+        verbose_name = _("Idea Translations")
+        verbose_name_plural = _("Idea Translations")
+        ordering = ["language"]
+        unique_together = [["idea", "language"]]
+        
+    def __str__(self):
+        return self.title
