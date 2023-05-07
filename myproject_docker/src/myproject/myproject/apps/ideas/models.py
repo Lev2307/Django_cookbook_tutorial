@@ -1,6 +1,8 @@
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
+from django.conf import settings
+from django.core.exceptions import ValidationError
 
 from myproject.apps.core.models import UrlBase, CreationModificationDateBase, MetaTagsBase, object_relation_base_factory
 
@@ -39,44 +41,66 @@ class Like(FavoriteObjectBase, OwnerBase):
                 owner=self.owner_content_object,
                 object=self.content_object
             )
-
-# class Idea(UrlBase, MetaTagsBase, CreationModificationDateBase):
-#     title = MultilingualCharField(
-#         _("Title"),
-#         max_length=200
-#     )
-#     content = MultilingualTextField(
-#         _("Content"),
-#     )
-#     # other fields…
-#     class Meta:
-#         verbose_name = _("Idea")
-#         verbose_name_plural = _("Ideas")
-
-#     def __str__(self):
-#         return self.title
-
-#     def get_url_path(self):
-#         return reverse("idea_details", kwargs={
-#             "idea_id": str(self.pk),
-#         })
 class Idea(models.Model):
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        verbose_name=_("Author"),
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name="authored_ideas",
+    )
+    categories = models.ManyToManyField(
+        "categories.Category",
+        verbose_name=_("Categories"),
+        blank=True,
+        related_name="ideas",
+    )
     title = models.CharField(
         _("Title"),
         max_length=200,
     )
     content = models.TextField(
         _("Content"),
+        max_length=500
     )
     translated_title = TranslatedField("title")
     translated_content = TranslatedField("content")
 
     class Meta:
         verbose_name = _("Idea")
-        verbose_name_plural = _("Ideas")
+        verbose_name_plural = _("Ideas")    
+        constraints = [
+            models.UniqueConstraint(
+                fields=["title"],
+                condition=models.Q(author=None),
+                name="unique_titles_for_each_author",
+            ),
+            models.CheckConstraint(
+                check=models.Q(
+                    title__iregex=r"^\S.*\S$"
+                    # starts with non-whitespace,
+                    # ends with non-whitespace,
+                    # anything in the middle
+                ),
+                name="title_has_no_leading_and_trailing_whitespaces",
+            )
+        ]
 
     def __str__(self):
         return self.title
+
+    def clean(self):
+        import re
+        if self.author and Idea.objects.exclude(pk=self.pk).filter(author=self.author, title=self.title).exists():
+            raise ValidationError(
+                _("Each idea of the same user should have a unique title.")
+            )
+        if not re.match(r"^\S.*\S$", self.title):
+            raise ValidationError(
+                _("The title cannot start or end with a whitespace.")
+            )
+
 
 class IdeaTranslations(models.Model):
     idea = models.ForeignKey(
