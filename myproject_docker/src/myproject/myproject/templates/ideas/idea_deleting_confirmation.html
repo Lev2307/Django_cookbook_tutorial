@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %} Delete Idea {% endblock title %}
+
+{% block content %}
+    <div>
+        <a href="{% url "ideas:idea_list" %}">{% trans "List of ideas" %}</a>
+        <h5>
+            {% blocktrans trimmed with title=idea.title url_path=idea.get_url_path %}
+                Do you really want to delete idea "<a href="{{ url_path }}">{{ title }}</a>"?
+            {% endblocktrans %}
+        </h5>
+
+        <form action="" method="post">
+            {% csrf_token %}
+            <button type="submit">Delete</button>
+        </form>
+    </div>
+{% endblock content %}

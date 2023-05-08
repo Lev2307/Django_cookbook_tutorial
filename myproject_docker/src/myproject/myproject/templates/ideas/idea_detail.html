@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %} Idea - {{ idea.title }} {% endblock title %}
+
+{% block content %}
+    <div>
+        <a href="{% url "ideas:idea_list" %}">{% trans "List of ideas" %}</a>
+        <h1>Author - {{ idea.author }}</h1>
+        <h1>
+            {% blocktrans trimmed with title=idea.translated_title %}
+                Idea "{{ title }}"
+            {% endblocktrans %}
+        </h1>
+       {{ idea.translated_content|linebreaks|urlize }}
+        <ul>
+            {% for category in idea.categories.all %}
+                <li>{{ category.translated_title }}</li>
+            {% endfor %}
+        </ul>
+        <h1>Rating - {{ idea.rating }}</h1>
+        <a href="{% url 'ideas:change_idea' pk=idea.pk %}" class="btn btn-primary">{% trans "Change this idea" %}</a>
+        <a href="{% url 'ideas:delete_idea' pk=idea.pk %}" class="btn btn-danger">{% trans "Delete this idea" %}</a>
+    </div>
+{% endblock %}

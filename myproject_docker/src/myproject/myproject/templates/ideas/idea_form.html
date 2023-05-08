@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %} Change idea {% endblock title %}
+
+{% block content %}
+    <a href="{% url "ideas:idea_list" %}">{% trans "List of ideas" %}</a>
+    <div>
+        <form action="" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Edit Data</button>
+        </form>
+    </div>
+{% endblock content %}

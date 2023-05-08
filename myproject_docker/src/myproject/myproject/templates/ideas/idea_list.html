@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %} Ideas List {% endblock title %}
+
+{% block content %}
+    <div>
+        {% for idea in ideas %}
+            <div>
+                <a href="{{ idea.get_url_path }}">
+                    <div>
+                        {{ idea.translated_title }}
+                    </div>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

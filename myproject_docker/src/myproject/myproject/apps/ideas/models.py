@@ -1,3 +1,5 @@
+import uuid
+
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -13,35 +15,47 @@ from myproject.apps.core.model_fields import (
 )
 
 
-FavoriteObjectBase = object_relation_base_factory(
-    is_required=True,
-)
+# FavoriteObjectBase = object_relation_base_factory(
+#     is_required=True,
+# )
 
-OwnerBase = object_relation_base_factory(
-    prefix="owner",
-    prefix_verbose=_("Owner"),
-    is_required=True,
-    add_related_name=True,
-    limit_content_type_choices_to={
-        "model__in": (
-        "user",
-        "group",
-        )
-    }
-)
+# OwnerBase = object_relation_base_factory(
+#     prefix="owner",
+#     prefix_verbose=_("Owner"),
+#     is_required=True,
+#     add_related_name=True,
+#     limit_content_type_choices_to={
+#         "model__in": (
+#         "user",
+#         "group",
+#         )
+#     }
+# )
 
 
-class Like(FavoriteObjectBase, OwnerBase):
-    class Meta:
-        verbose_name = _("Like")
-        verbose_name_plural = _("Likes")
+# class Like(FavoriteObjectBase, OwnerBase):
+#     class Meta:
+#         verbose_name = _("Like")
+#         verbose_name_plural = _("Likes")
     
-    def __str__(self):
-        return  _("{owner} likes {object}").format(
-                owner=self.owner_content_object,
-                object=self.content_object
-            )
-class Idea(models.Model):
+#     def __str__(self):
+#         return  _("{owner} likes {object}").format(
+#                 owner=self.owner_content_object,
+#                 object=self.content_object
+#                  )
+
+RATING_CHOICES = (
+    (1, "★☆☆☆☆"),
+    (2, "★★☆☆☆"),
+    (3, "★★★☆☆"),
+    (4, "★★★★☆"),
+    (5, "★★★★★"),
+)
+
+class Idea(CreationModificationDateBase, UrlBase):
+    uuid = models.UUIDField(
+        primary_key=True, default=uuid.uuid4, editable=False
+    )
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         verbose_name=_("Author"),
@@ -53,8 +67,10 @@ class Idea(models.Model):
     categories = models.ManyToManyField(
         "categories.Category",
         verbose_name=_("Categories"),
-        blank=True,
-        related_name="ideas",
+        related_name="category_ideas",
+    )
+    rating = models.PositiveIntegerField(
+        _("Rating"), choices=RATING_CHOICES, blank=True, null=True
     )
     title = models.CharField(
         _("Title"),
@@ -89,6 +105,9 @@ class Idea(models.Model):
 
     def __str__(self):
         return self.title
+    
+    def get_url_path(self):
+        return reverse("ideas:idea_detail", kwargs={"pk": self.pk})
 
     def clean(self):
         import re
@@ -111,13 +130,8 @@ class IdeaTranslations(models.Model):
     )
 
     language = models.CharField(_("Language"), max_length=7)
-    title = models.CharField(
-        _("Title"),
-        max_length=200,
-    )
-    content = models.TextField(
-        _("Content"),
-    )
+    title = models.CharField(_("Title"), max_length=200)
+    content = models.TextField( _("Content"))
 
     class Meta:
         verbose_name = _("Idea Translations")
