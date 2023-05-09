@@ -50,6 +50,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.forms',
+    "crispy_forms",
     "myproject.apps.categories",
     "myproject.apps.core",
     "myproject.apps.ideas",
@@ -72,7 +74,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [os.path.join(BASE_DIR, 'myproject', 'templates')],
-        'APP_DIRS': True,
+        "APP_DIRS": True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -83,6 +85,11 @@ TEMPLATES = [
         },
     },
 ]
+
+FORM_RENDERER = "django.forms.renderers.TemplatesSetting"
+
+CRISPY_TEMPLATE_PACK = "bootstrap4"
+
 
 WSGI_APPLICATION = 'myproject.wsgi.application'
 
@@ -139,8 +146,6 @@ LANGUAGES = [
     ("sk", "Slovak"), ("sl", "Slovene"),
     ("es", "Spanish"), ("sv", "Swedish"),
 ]
-
-
 
 TIME_ZONE = 'UTC'
 

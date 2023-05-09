@@ -1,18 +1,27 @@
 import uuid
+import contextlib
+import os
+
+from imagekit.models import ImageSpecField
+from pilkit.processors import ResizeToFill
 
 from django.db import models
 from django.urls import reverse
+from django.utils.timezone import now as timezone_now
 from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 from django.core.exceptions import ValidationError
 
-from myproject.apps.core.models import UrlBase, CreationModificationDateBase, MetaTagsBase, object_relation_base_factory
+from myproject.apps.core.models import UrlBase, CreationModificationDateBase
 
 from myproject.apps.core.model_fields import (
     MultilingualCharField,
     MultilingualTextField,
     TranslatedField
 )
+
+
+
 
 
 # FavoriteObjectBase = object_relation_base_factory(
@@ -52,6 +61,12 @@ RATING_CHOICES = (
     (5, "★★★★★"),
 )
 
+def upload_to(instance, filename):
+    now = timezone_now()
+    base, extension = os.path.splitext(filename)
+    extension = extension.lower()
+    return f"ideas/{now:%Y/%m}/{instance.pk}/{extension}"
+
 class Idea(CreationModificationDateBase, UrlBase):
     uuid = models.UUIDField(
         primary_key=True, default=uuid.uuid4, editable=False
@@ -82,6 +97,24 @@ class Idea(CreationModificationDateBase, UrlBase):
     )
     translated_title = TranslatedField("title")
     translated_content = TranslatedField("content")
+
+    picture = models.ImageField(_("Image"), upload_to=upload_to)
+    picture_social = ImageSpecField(
+        source="picture",
+        processors=[ResizeToFill(1024, 512)],
+        format="JPEG",
+        options={'quality': 100}
+    )
+    picture_large = ImageSpecField(
+        source="picture",
+        processors=[ResizeToFill(800, 400)],
+        format="PNG"
+    )
+    picture_thumnail = ImageSpecField(
+        source="picture",
+        processors=[ResizeToFill(728, 250)],
+        format="PNG"
+    )
 
     class Meta:
         verbose_name = _("Idea")
@@ -120,6 +153,21 @@ class Idea(CreationModificationDateBase, UrlBase):
                 _("The title cannot start or end with a whitespace.")
             )
 
+    def delete(self, *args, **kwargs):
+        from django.core.files.storage import default_storage
+        if self.picture:
+            with contextlib.suppress(FileNotFoundError):
+                default_storage.delete(
+                    self.picture_social.path
+                )
+                default_storage.delete(
+                    self.picture_large.path
+                )
+                default_storage.delete(
+                    self.picture_thumbnail.path
+                )
+            self.picture.delete()
+        super().delete(*args, **kwargs)
 
 class IdeaTranslations(models.Model):
     idea = models.ForeignKey(

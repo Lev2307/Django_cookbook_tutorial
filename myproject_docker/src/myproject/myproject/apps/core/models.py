@@ -9,7 +9,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.core.exceptions import FieldError
 
 
-
+# Это всё миксины, UrlBase - получить ПОЛНЫЙ url объекта =]
 class UrlBase(models.Model):
     """
         A replacement for get_absolute_url()

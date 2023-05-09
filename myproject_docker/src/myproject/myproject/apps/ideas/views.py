@@ -24,15 +24,16 @@ def add_or_change_idea(request, pk=None):
     
     if request.method == "POST":
         form = IdeaForm(
-            request.POST,
-            request.FILES,
+            request,
+            data=request.POST,
+            files=request.FILES,
             instance=idea
         )
         if form.is_valid():
             form = form.save()
             return redirect("ideas:idea_list")
     else:
-        form = IdeaForm(instance=idea)
+        form = IdeaForm(request, instance=idea)
     context = {"idea": idea, "form": form}
     return render(request, 'ideas/idea_form.html', context)
 

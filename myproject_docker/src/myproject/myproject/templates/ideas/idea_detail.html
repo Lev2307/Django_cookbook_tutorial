@@ -19,6 +19,8 @@
             {% endfor %}
         </ul>
         <h1>Rating - {{ idea.rating }}</h1>
+        <img src="{{ idea.picture_large.url }}" alt="" />
+
         <a href="{% url 'ideas:change_idea' pk=idea.pk %}" class="btn btn-primary">{% trans "Change this idea" %}</a>
         <a href="{% url 'ideas:delete_idea' pk=idea.pk %}" class="btn btn-danger">{% trans "Delete this idea" %}</a>
     </div>
