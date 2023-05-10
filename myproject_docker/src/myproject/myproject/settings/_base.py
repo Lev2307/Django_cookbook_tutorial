@@ -147,6 +147,12 @@ LANGUAGES = [
     ("es", "Spanish"), ("sv", "Swedish"),
 ]
 
+LANGUAGES_EXCEPT_THE_DEFAULT = [
+    (lang_code, lang_name)
+    for lang_code, lang_name in LANGUAGES
+    if lang_code != LANGUAGE_CODE
+]
+
 TIME_ZONE = 'UTC'
 
 USE_I18N = True

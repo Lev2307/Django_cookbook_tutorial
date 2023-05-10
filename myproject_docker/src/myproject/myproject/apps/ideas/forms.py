@@ -2,10 +2,34 @@ from django import forms
 
 from crispy_forms import bootstrap, helper, layout
 
+from django.conf import settings
+from django.contrib.auth import get_user_model
+from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from .models import Idea
+from .models import Idea, IdeaTranslations, RATING_CHOICES
+from myproject.apps.categories.models import Category
 
+User = get_user_model()
+
+class IdeaFilterForm(forms.Form):
+    author = forms.ModelChoiceField(
+        label=_("Author"),
+        required=False,
+        queryset=User.objects.annotate(
+            idea_count=models.Count("authored_ideas")
+        ).filter(idea_count__gt=0),
+    )
+    category = forms.ModelChoiceField(
+        label=_("Category"),
+        required=False,
+        queryset=Category.objects.annotate(
+            idea_count=models.Count("category_ideas")
+        ).filter(idea_count__gt=0),
+    )
+    rating = forms.ChoiceField(
+        label=_("Rating"), required=False, choices=RATING_CHOICES
+    )
 
 class IdeaForm(forms.ModelForm):
     class Meta:
@@ -48,6 +72,10 @@ class IdeaForm(forms.ModelForm):
             _("Categories"), categories_field,
             css_id="categories_fieldset"
         )
+
+        inline_translations = layout.HTML(
+            """{% include 'ideas/forms/translations.html' %}"""
+        )
         submit_button = layout.Submit("save", _("Save"))
         actions = bootstrap.FormActions(submit_button)
 
@@ -56,6 +84,7 @@ class IdeaForm(forms.ModelForm):
         self.helper.form_method = "POST"
         self.helper.layout = layout.Layout(
             main_fieldset,
+            inline_translations,
             picture_fieldset,
             categories_fieldset,
             actions,
@@ -68,3 +97,44 @@ class IdeaForm(forms.ModelForm):
             instance.save()
             self.save_m2m()
         return instance
+    
+
+class IdeaTranslationsForm(forms.ModelForm):
+    language = forms.ChoiceField(
+        label=_("Language"),
+        choices=settings.LANGUAGES_EXCEPT_THE_DEFAULT,
+        required=True
+    )
+    class Meta:
+        model = IdeaTranslations
+        fields = "__all__"
+        exclude = ['idea']
+    
+    def __init__(self, request, *args, **kwargs):
+        self.request = request
+        super().__init__(*args, **kwargs)
+        id_field = layout.Field("id")
+        language_field = layout.Field(
+            "language", css_class="input-block-level"
+        )
+        title_field = layout.Field(
+            "title", css_class="input-block-level"
+        )
+        content_field = layout.Field(
+            "content", css_class="input-block-level"
+        )
+        delete_field = layout.Field("DELETE")
+        main_fieldset = layout.Fieldset(
+            _("main data"),
+            id_field,
+            language_field,
+            title_field, 
+            content_field, 
+            delete_field
+        )
+        self.helper = helper.FormHelper()
+        self.helper.form_tag = False
+        self.helper.disable_csrf = True
+        self.helper.layout = layout.Layout(main_fieldset)
+
+
