@@ -99,10 +99,8 @@ def idea_list(request):
             "ratings": RATING_CHOICES,
         },
     }
-    print(facets)
 
     if form.is_valid():
-        print(form.cleaned_data)
         filters = (
             # query parameter, filter parameter
             ("author", "author"),
