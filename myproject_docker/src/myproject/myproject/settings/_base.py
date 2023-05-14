@@ -51,7 +51,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.forms',
+
     "crispy_forms",
+    "django_json_ld",
+    "qr_code",
+
     "myproject.apps.categories",
     "myproject.apps.core",
     "myproject.apps.ideas",
@@ -81,6 +85,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                "myproject.apps.core.context_processors.website_url",
             ],
         },
     },

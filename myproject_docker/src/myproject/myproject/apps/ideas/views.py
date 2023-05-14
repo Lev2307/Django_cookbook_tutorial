@@ -1,8 +1,10 @@
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, View
 from django.forms import modelformset_factory
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.template.loader import render_to_string
 
 from .models import Idea, IdeaTranslations, RATING_CHOICES
 from .forms import IdeaForm, IdeaTranslationsForm, IdeaFilterForm
@@ -73,7 +75,6 @@ def delete_idea(request, pk):
 def filter_facets(facets, qs, form, filters):
     for query_param, filter_param in filters:
         value = form.cleaned_data[query_param]
-        print(value)
         if value:
             selected_value = value
             if query_param == "rating":
@@ -85,29 +86,120 @@ def filter_facets(facets, qs, form, filters):
     return qs
 
 
-PAGE_SIZE = getattr(settings, "PAGE_SIZE", 24)
+PAGE_SIZE = getattr(settings, "PAGE_SIZE", 1)
 
-def idea_list(request):
-    qs = Idea.objects.order_by("title")
-    form = IdeaFilterForm(data=request.GET)
+class IdeaListView(View):
+    form_class = IdeaFilterForm
+    model = Idea
+    template_name = "ideas/idea_list.html"
 
-    facets = {
-        "selected": {},
-        "categories": {
-            "authors": form.fields["author"].queryset,
-            "categories": form.fields["category"].queryset,
-            "ratings": RATING_CHOICES,
-        },
-    }
+    def get(self, request, *args, **kwargs):
+        form = self.form_class(data=request.GET)
+        qs, facets = self.get_queryset_and_facets(form)
+        page = self.get_page(request, qs)
+        context = {"form": form, "facets": facets, "object_list": page}
+        return render(request, self.template_name, context)
 
-    if form.is_valid():
-        filters = (
+    def get_queryset_and_facets(self, form):
+        qs = Idea.objects.order_by("title")
+        facets = {
+            "selected": {},
+            "categories": {
+                "authors": form.fields["author"].queryset,
+                "categories": form.fields["category"].queryset,
+                "ratings": RATING_CHOICES,
+            },
+        }
+        if form.is_valid():
+            filters = (
             # query parameter, filter parameter
             ("author", "author"),
             ("category", "categories"),
             ("rating", "rating"),
-        )
-        qs = filter_facets(facets, qs, form, filters)
+            )
+            qs = self.filter_facets(facets, qs, form, filters)
+        return qs, facets
 
-    context = {"form": form, "facets": facets, "object_list": qs}
-    return render(request, "ideas/idea_list.html", context)
+    @staticmethod
+    def filter_facets(facets, qs, form, filters):
+        for query_param, filter_param in filters:
+            value = form.cleaned_data[query_param]
+            if value:
+                selected_value = value
+                if query_param == "rating":
+                    rating = int(value)
+                    selected_value = (rating, dict(RATING_CHOICES)[rating])
+                facets["selected"][query_param] = selected_value
+                filter_args = {filter_param: value}
+                qs = qs.filter(**filter_args).distinct()
+        return qs
+
+    def get_page(self, request, qs):
+        paginator = Paginator(qs, PAGE_SIZE)
+        page_number = request.GET.get("page")
+        try:
+            page = paginator.page(page_number)
+        except PageNotAnInteger:
+            page = paginator.page(1)
+        except EmptyPage:
+            page = paginator.page(paginator.num_pages)
+        return page
+
+def idea_handout_pdf(request, pk):
+    from django.utils.timezone import now as timezone_now
+    from django.utils.text import slugify
+    from django.http import HttpResponse
+    from weasyprint import HTML
+    from weasyprint.text.fonts import FontConfiguration
+
+
+    idea = get_object_or_404(Idea, pk=pk)
+    context = {"idea": idea}
+    html = render_to_string("ideas/idea_handout_pdf.html", context)
+    response = HttpResponse(content_type="application/pdf")
+    response["Content-Disposition"] = "inline; filename={date}-{name}-handout.pdf".format(
+        date=timezone_now().strftime("%Y-%m-%d"),
+        name=slugify(idea.translated_title),
+    )
+    font_config = FontConfiguration()
+    HTML(string=html).write_pdf(response, font_config=font_config)
+    return response
+
+
+# def idea_list(request):
+#     qs = Idea.objects.order_by("title")
+#     form = IdeaFilterForm(data=request.GET)
+
+#     facets = {
+#         "selected": {},
+#         "categories": {
+#             "authors": form.fields["author"].queryset,
+#             "categories": form.fields["category"].queryset,
+#             "ratings": RATING_CHOICES,
+#         },
+#     }
+
+#     if form.is_valid():
+#         filters = (
+#             # query parameter, filter parameter
+#             ("author", "author"),
+#             ("category", "categories"),
+#             ("rating", "rating"),
+#         )
+#         qs = filter_facets(facets, qs, form, filters)
+    
+#     paginator = Paginator(qs, PAGE_SIZE)
+#     page_number = request.GET.get("page")
+#     try:
+#         page = paginator.page(page_number)
+#     except PageNotAnInteger:
+#         # If page is not an integer, show first page.
+#         page = paginator.page(1)
+#     except EmptyPage:
+#         # If page is out of range, show last existing page.
+#         page = paginator.page(paginator.num_pages)
+
+#     print(page)
+
+#     context = {"form": form, "facets": facets, "object_list": page}
+#     return render(request, "ideas/idea_list.html", context)

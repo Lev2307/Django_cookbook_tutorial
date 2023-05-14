@@ -169,6 +169,26 @@ class Idea(CreationModificationDateBase, UrlBase):
             self.picture.delete()
         super().delete(*args, **kwargs)
 
+    @property
+    def structured_data(self):
+        from django.utils.translation import get_language
+        lang_code = get_language()
+        data = {
+            "@type": "CreativeWork",
+            "name": self.translated_title,
+            "description": self.translated_content,
+            "inLanguage": lang_code,
+        }
+        if self.author:
+            data["author"] = {
+                "@type": "Person",
+                "name": self.author.get_full_name() or self.author.username,
+            }
+        if self.picture:
+            data["image"] = self.picture_social.url
+        return data
+
+
 class IdeaTranslations(models.Model):
     idea = models.ForeignKey(
         Idea,

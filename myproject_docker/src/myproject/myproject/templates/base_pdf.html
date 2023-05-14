@@ -1,0 +1,41 @@
+<!doctype html>
+{% load i18n static %}
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,
+    initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>{% trans "Hello, World!" %}</title>
+
+    <style>
+        @page {
+            size: "A4";
+            margin: 2.5cm 1.5cm 3.5cm 1.5cm;
+        }
+        footer {
+            position: fixed;
+            bottom: -2.5cm;
+            width: 100%;
+            text-align: center;
+            font-size: 10pt;
+        }
+        footer img {
+            height: 1.5cm;
+        }
+    </style>
+    {% block meta_tags %}{% endblock %}
+</head> 
+<body>
+    <main class="container">
+        {% block content %}
+        {% endblock %}
+    </main>
+    <footer>
+        <br />
+        {% trans "Printed from MyProject" %}
+    </footer>
+</body>
+</html>

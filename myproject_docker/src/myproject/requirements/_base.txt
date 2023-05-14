@@ -7,3 +7,6 @@ sqlparse==0.3.0
 Pillow==9.5.0
 django-imagekit==4.0.2
 django-crispy-forms==1.11.1
+django-json-ld==0.0.4
+django-qr-code==1.0.0
+weasyprint==59.0
