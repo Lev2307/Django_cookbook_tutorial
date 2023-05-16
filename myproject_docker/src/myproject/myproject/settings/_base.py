@@ -54,11 +54,13 @@ INSTALLED_APPS = [
 
     "crispy_forms",
     "django_json_ld",
+    "haystack",
     "qr_code",
 
     "myproject.apps.categories",
     "myproject.apps.core",
     "myproject.apps.ideas",
+    "myproject.apps.search",
 ]
 
 MIDDLEWARE = [
@@ -136,21 +138,34 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
 LANGUAGE_CODE = "en"
-
+# All official languages of European Union
 LANGUAGES = [
-    ("bg", "Bulgarian"), ("hr", "Croatian"),
-    ("cs", "Czech"), ("da", "Danish"),
-    ("nl", "Dutch"), ("en", "English"),
-    ("et", "Estonian"), ("fi", "Finnish"),
-    ("fr", "French"), ("de", "German"),
-    ("el", "Greek"), ("hu", "Hungarian"),
-    ("ga", "Irish"), ("it", "Italian"),
-    ("lv", "Latvian"), ("lt", "Lithuanian"),
-    ("mt", "Maltese"), ("pl", "Polish"),
-    ("pt", "Portuguese"), ("ro", "Romanian"),
-    ("sk", "Slovak"), ("sl", "Slovene"),
-    ("es", "Spanish"), ("sv", "Swedish"),
+    ("bg", "Bulgarian"),
+    ("hr", "Croatian"),
+    ("cs", "Czech"),
+    ("da", "Danish"),
+    ("nl", "Dutch"),
+    ("en", "English"),
+    ("et", "Estonian"),
+    ("fi", "Finnish"),
+    ("fr", "French"),
+    ("de", "German"),
+    ("el", "Greek"),
+    ("hu", "Hungarian"),
+    ("ga", "Irish"),
+    ("it", "Italian"),
+    ("lv", "Latvian"),
+    ("lt", "Lithuanian"),
+    ("mt", "Maltese"),
+    ("pl", "Polish"),
+    ("pt", "Portuguese"),
+    ("ro", "Romanian"),
+    ("sk", "Slovak"),
+    ("sl", "Slovene"),
+    ("es", "Spanish"),
+    ("sv", "Swedish"),
 ]
+
 
 LANGUAGES_EXCEPT_THE_DEFAULT = [
     (lang_code, lang_name)
@@ -190,3 +205,13 @@ EMAIL_HOST = get_secret("EMAIL_HOST")
 EMAIL_PORT = get_secret("EMAIL_PORT")
 EMAIL_HOST_USER = get_secret("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = get_secret("EMAIL_HOST_PASSWORD")
+
+HAYSTACK_CONNECTIONS = {}
+for lang_code, lang_name in LANGUAGES:
+    lang_code_underscored = lang_code.replace("-", "_")
+    HAYSTACK_CONNECTIONS[f"default_{lang_code_underscored}"] = {
+        "ENGINE": "myproject.apps.search.multilingual_whoosh_backend.MultilingualWhooshEngine",
+        "PATH": os.path.join(BASE_DIR, "tmp", f"whoosh_index_{lang_code_underscored}"),
+    }
+lang_code_underscored = LANGUAGE_CODE.replace("-", "_")
+HAYSTACK_CONNECTIONS["default"] = HAYSTACK_CONNECTIONS[f"default_{lang_code_underscored}"]

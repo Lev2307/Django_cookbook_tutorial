@@ -1,7 +1,8 @@
-from django.db import models
 from django.conf import settings
+from django.db import models
 from django.utils.translation import get_language
 from django.utils import translation
+
 
 class MultilingualField(models.Field):
     SUPPORTED_FIELD_TYPES = [models.CharField, models.TextField]
@@ -69,7 +70,8 @@ class MultilingualField(models.Field):
 
                 setattr(cls, name, property(translated_value))
             else:
-                super().contribute_to_class(cls, name, private_only, virtual_only)
+                super().contribute_to_class(
+                    cls, name, private_only, virtual_only)
 
 
 class MultilingualCharField(models.CharField, MultilingualField):
@@ -78,6 +80,7 @@ class MultilingualCharField(models.CharField, MultilingualField):
 
 class MultilingualTextField(models.TextField, MultilingualField):
     pass
+
 
 class TranslatedField(object):
     def __init__(self, field_name):

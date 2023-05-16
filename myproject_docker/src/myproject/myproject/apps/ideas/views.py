@@ -5,6 +5,7 @@ from django.views.generic import ListView, DetailView, View
 from django.forms import modelformset_factory
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.template.loader import render_to_string
+from django.utils.functional import LazyObject
 
 from .models import Idea, IdeaTranslations, RATING_CHOICES
 from .forms import IdeaForm, IdeaTranslationsForm, IdeaFilterForm
@@ -97,8 +98,9 @@ class IdeaListView(View):
         form = self.form_class(data=request.GET)
         qs, facets = self.get_queryset_and_facets(form)
         page = self.get_page(request, qs)
-        context = {"form": form, "facets": facets, "object_list": page}
+        context = {"form": form, "facets": facets, "object_list": page, "request": request}
         return render(request, self.template_name, context)
+
 
     def get_queryset_and_facets(self, form):
         qs = Idea.objects.order_by("title")

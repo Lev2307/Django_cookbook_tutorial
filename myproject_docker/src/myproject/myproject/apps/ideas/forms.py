@@ -136,5 +136,3 @@ class IdeaTranslationsForm(forms.ModelForm):
         self.helper.form_tag = False
         self.helper.disable_csrf = True
         self.helper.layout = layout.Layout(main_fieldset)
-
-
