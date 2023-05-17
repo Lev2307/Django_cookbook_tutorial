@@ -20,6 +20,8 @@ from django.urls import path, include
 
 from django.views.generic import TemplateView
 
+from myproject.apps.core import views as core_views
+
 
 urlpatterns = [
     path('', TemplateView.as_view(template_name="index.html")),
@@ -27,6 +29,8 @@ urlpatterns = [
     path('accounts/', include("django.contrib.auth.urls")),
     path("ideas/", include(("myproject.apps.ideas.urls", "ideas"), namespace="ideas")),
     path("search/", include("haystack.urls")),
+    path("js-settings/", core_views.js_settings, name="js_settings"),
+
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static("/media/", document_root=settings.MEDIA_ROOT)

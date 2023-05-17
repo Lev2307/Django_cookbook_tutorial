@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     "crispy_forms",
     "django_json_ld",
     "haystack",
+    "sekizai",
     "qr_code",
 
     "myproject.apps.categories",
@@ -88,6 +89,8 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 "myproject.apps.core.context_processors.website_url",
+                "sekizai.context_processors.sekizai",
+
             ],
         },
     },
