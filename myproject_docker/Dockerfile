@@ -9,6 +9,7 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 # install dependencies
+RUN apt-get update && apt-get install -y binutils libproj-dev gdal-bin python3-gdal   
 RUN pip install --upgrade pip setuptools
 
 # create user for the Django project

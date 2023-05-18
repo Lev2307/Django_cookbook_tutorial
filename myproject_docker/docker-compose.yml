@@ -37,7 +37,7 @@ services:
       EMAIL_HOST_PASSWORD: "${EMAIL_HOST_PASSWORD}"
 
   db:
-    image: postgres:latest
+    image: kartoza/postgis:12.0
     restart: always
     environment:
       POSTGRES_DB: "${DATABASE_NAME}"

@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
+    'django.contrib.gis',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
@@ -62,6 +63,7 @@ INSTALLED_APPS = [
     "myproject.apps.core",
     "myproject.apps.ideas",
     "myproject.apps.search",
+    "myproject.apps.locations",
 ]
 
 MIDDLEWARE = [
@@ -109,7 +111,7 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': get_secret('DATABASE_NAME'),
         'USER': get_secret('DATABASE_USER'),
         'PASSWORD': get_secret('DATABASE_PASSWORD'),
