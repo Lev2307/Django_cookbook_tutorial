@@ -56,17 +56,6 @@ class Location(CreationModificationDateBase, UrlBase):
             self.pk = uuid.uuid4()
         super().save(*args, **kwargs)
 
-    def delete(self, *args, **kwargs):
-        from django.core.files.storage import default_storage
-
-        if self.picture:
-            with contextlib.suppress(FileNotFoundError):
-                default_storage.delete(self.picture_desktop.path)
-                default_storage.delete(self.picture_tablet.path)
-                default_storage.delete(self.picture_mobile.path)
-            self.picture.delete()
-        super().delete(*args, **kwargs)
-
     def get_field_value(self, field_name):
         if isinstance(field_name, str):
             value = getattr(self, field_name)
