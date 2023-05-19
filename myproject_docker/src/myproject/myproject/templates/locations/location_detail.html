@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load i18n static %}
+
+
+
+{% block content %}
+    <a href="{% url "locations:location_list" %}">{% trans "Interesting Locations" %}</a>
+    <h1 class="map-title">{{ location.name }}</h1>
+    <div class="my-3">{{ location.description|linebreaks|urlize }}</div>
+    {% with geoposition=location.get_geoposition %}
+        <div style="width: 500px; height: 500px;" id="map" class="map" data-latitude="{{ geoposition.latitude|stringformat:"f" }}" data-longitude="{{ geoposition.longitude|stringformat:"f" }}" data-address="{{ location.get_full_address }}"></div>
+    {% endwith %}
+{% endblock %}
+
+{% block js %}
+<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey={{ key }}" type="text/javascript"></script>
+<script type="text/javascript">
+    let map = document.getElementById('map');
+    let latitude = map.getAttribute("data-latitude")
+    let longitude = map.getAttribute("data-longitude")
+    ymaps.ready(function () {
+        var map = new ymaps.Map('map', {
+            center: [longitude, latitude],
+            zoom: 10
+        });
+        let placemark = new ymaps.Placemark([longitude, latitude], {}, {
+
+        });
+        map.controls.remove('geolocationControl'); // удаляем геолокацию
+        map.controls.remove('searchControl'); // удаляем поиск
+        map.controls.remove('trafficControl'); // удаляем контроль трафика
+        map.controls.remove('typeSelector'); // удаляем тип
+        map.controls.remove('fullscreenControl'); // удаляем кнопку перехода в полноэкранный режим
+        map.controls.remove('zoomControl'); // удаляем контрол зуммирования
+        map.controls.remove('rulerControl'); // удаляем контрол правил
+        map.geoObjects.add(placemark)
+        // ...
+    });
+
+
+    </script>
+{% endblock %}
+
+

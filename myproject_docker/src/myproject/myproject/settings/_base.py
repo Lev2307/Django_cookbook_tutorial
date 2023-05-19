@@ -90,8 +90,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                "myproject.apps.core.context_processors.website_url",
                 "sekizai.context_processors.sekizai",
+                "myproject.apps.core.context_processors.website_url",
+                "myproject.apps.core.context_processors.yandex_maps",
 
             ],
         },
@@ -138,6 +139,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+YANDEX_MAPS_API_KEY = get_secret("YANDEX_MAPS_API_KEY")
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/

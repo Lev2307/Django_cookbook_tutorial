@@ -13,24 +13,24 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.conf.urls.static import static
-from django.conf import settings
 from django.contrib import admin
-from django.urls import path, include
-
-from django.views.generic import TemplateView
-
+from django.conf.urls.i18n import i18n_patterns
+from django.urls import include, path
+from django.conf import settings
+from django.conf.urls.static import static
+from django.shortcuts import redirect
 from myproject.apps.core import views as core_views
 
 
-urlpatterns = [
-    path('', TemplateView.as_view(template_name="index.html")),
+urlpatterns = i18n_patterns(
+    path("", lambda request: redirect("locations:location_list")),
     path('admin/', admin.site.urls),
     path('accounts/', include("django.contrib.auth.urls")),
     path("ideas/", include(("myproject.apps.ideas.urls", "ideas"), namespace="ideas")),
+    path("locations/", include(("myproject.apps.locations.urls", "locations"), namespace="locations")),
     path("search/", include("haystack.urls")),
     path("js-settings/", core_views.js_settings, name="js_settings"),
+)
 
-]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static("/media/", document_root=settings.MEDIA_ROOT)
