@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     "crispy_forms",
     "django_json_ld",
     "haystack",
+    "imagekit",
     "sekizai",
     "qr_code",
 

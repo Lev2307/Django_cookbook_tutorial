@@ -6,6 +6,13 @@
 {% block content %}
     <a href="{% url "locations:location_list" %}">{% trans "Interesting Locations" %}</a>
     <h1 class="map-title">{{ location.name }}</h1>
+    {% if location.picture %}
+        <picture class="img-fluid">
+            <source media="(max-width: 480px)" srcset="{{ location.picture_mobile.url }}" />
+            <source media="(max-width: 768px)" srcset="{{ location.picture_tablet.url }}" />
+            <img src="{{ location.picture_desktop.url }}" alt="{{ location.name }}" class="img-fluid"/>
+        </picture>
+    {% endif %}
     <div class="my-3">{{ location.description|linebreaks|urlize }}</div>
     {% with geoposition=location.get_geoposition %}
         <div style="width: 500px; height: 500px;" id="map" class="map" data-latitude="{{ geoposition.latitude|stringformat:"f" }}" data-longitude="{{ geoposition.longitude|stringformat:"f" }}" data-address="{{ location.get_full_address }}"></div>
@@ -13,32 +20,21 @@
 {% endblock %}
 
 {% block js %}
-<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey={{ key }}" type="text/javascript"></script>
-<script type="text/javascript">
-    let map = document.getElementById('map');
-    let latitude = map.getAttribute("data-latitude")
-    let longitude = map.getAttribute("data-longitude")
-    ymaps.ready(function () {
-        var map = new ymaps.Map('map', {
-            center: [longitude, latitude],
-            zoom: 10
+    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey={{ key }}" type="text/javascript"></script>
+    <script type="text/javascript">
+        let map = document.getElementById('map');
+        let latitude = map.getAttribute("data-latitude")
+        let longitude = map.getAttribute("data-longitude")
+        ymaps.ready(function () {
+            var map = new ymaps.Map('map', {
+                center: [longitude, latitude],
+                zoom: 10
+            });
+            let placemark = new ymaps.Placemark([longitude, latitude], {}, {
+            });
+            map.geoObjects.add(placemark)
         });
-        let placemark = new ymaps.Placemark([longitude, latitude], {}, {
-
-        });
-        map.controls.remove('geolocationControl'); // удаляем геолокацию
-        map.controls.remove('searchControl'); // удаляем поиск
-        map.controls.remove('trafficControl'); // удаляем контроль трафика
-        map.controls.remove('typeSelector'); // удаляем тип
-        map.controls.remove('fullscreenControl'); // удаляем кнопку перехода в полноэкранный режим
-        map.controls.remove('zoomControl'); // удаляем контрол зуммирования
-        map.controls.remove('rulerControl'); // удаляем контрол правил
-        map.geoObjects.add(placemark)
-        // ...
-    });
-
-
-    </script>
+        </script>
 {% endblock %}
 
 
