@@ -65,6 +65,7 @@ INSTALLED_APPS = [
     "myproject.apps.ideas",
     "myproject.apps.search",
     "myproject.apps.locations",
+    "myproject.apps.likes"
 ]
 
 MIDDLEWARE = [
@@ -172,6 +173,7 @@ LANGUAGES = [
     ("sl", "Slovene"),
     ("es", "Spanish"),
     ("sv", "Swedish"),
+    ("ru", "Russia"),
 ]
 
 
