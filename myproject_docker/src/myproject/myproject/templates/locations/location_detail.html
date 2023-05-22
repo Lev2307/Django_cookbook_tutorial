@@ -5,6 +5,7 @@
 
 {% block content %}
     <a href="{% url "locations:location_list" %}">{% trans "Interesting Locations" %}</a>
+    <a href="{% url "locations:add_or_change_location" pk=location.pk %}">{% trans "Create a new location" %}</a>
     <div class="float-right">
         {% if request.user.is_authenticated %}
             {% like_widget for location %}

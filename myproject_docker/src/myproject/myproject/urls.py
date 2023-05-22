@@ -33,5 +33,18 @@ urlpatterns = i18n_patterns(
     path("js-settings/", core_views.js_settings, name="js_settings"),
 )
 
+urlpatterns += [
+    path(
+        "upload-file/",
+        core_views.upload_file,
+        name="upload_file",
+    ),
+    path(
+        "delete-file/",
+        core_views.delete_file,
+        name="delete_file",
+    ),
+]
+
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static("/media/", document_root=settings.MEDIA_ROOT)
