@@ -28,6 +28,7 @@ urlpatterns = i18n_patterns(
     path('accounts/', include("django.contrib.auth.urls")),
     path("ideas/", include(("myproject.apps.ideas.urls", "ideas"), namespace="ideas")),
     path("locations/", include(("myproject.apps.locations.urls", "locations"), namespace="locations")),
+    path("news/", include(("myproject.apps.news.urls", "news"), namespace="news")),
     path("likes/", include(("myproject.apps.likes.urls", "likes"), namespace="likes")),
     path("search/", include("haystack.urls")),
     path("js-settings/", core_views.js_settings, name="js_settings"),

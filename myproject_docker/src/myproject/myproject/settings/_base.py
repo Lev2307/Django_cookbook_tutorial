@@ -65,7 +65,8 @@ INSTALLED_APPS = [
     "myproject.apps.ideas",
     "myproject.apps.search",
     "myproject.apps.locations",
-    "myproject.apps.likes"
+    "myproject.apps.likes",
+    "myproject.apps.news",
 ]
 
 MIDDLEWARE = [

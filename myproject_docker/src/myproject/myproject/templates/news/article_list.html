@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load utility_tags %}
+
+
+{% block content %}
+    {% load_objects all from locations.Location as all_locations %}
+    {{ all_locations }}
+    <div class="row">
+        <div class="col-lg-8">
+            {% if object_list %}
+                {% for item in object_list %}
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="card-title">
+                                <h5>{{ item.title }}</h5>
+                            </div>
+                            <div class="card-text">
+                                <p>{{ item.content }}</p>
+                            </div>
+                            <div class="card-footer">
+                                <h5>{{ item.publishing_status }}</h5>
+                            </div>
+                        </div>
+                        {{ item.created|date_since }}
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>You don`t have any articles =/</p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock content %}
