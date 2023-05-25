@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     "django_json_ld",
     "haystack",
     "imagekit",
+    "ordered_model",
     "sekizai",
     "qr_code",
 
@@ -67,6 +68,7 @@ INSTALLED_APPS = [
     "myproject.apps.locations",
     "myproject.apps.likes",
     "myproject.apps.news",
+    "myproject.apps.products",
 ]
 
 MIDDLEWARE = [

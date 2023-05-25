@@ -13,6 +13,7 @@ django-elasticsearch-dsl==7.1.4
 django-haystack==3.0
 django-imagekit==4.0.2
 django-json-ld==0.0.4
+django_ordered_model==3.7.4
 django-sekizai==1.0.0
 django-qr-code==2.1.0
 elasticsearch==7.11.0
