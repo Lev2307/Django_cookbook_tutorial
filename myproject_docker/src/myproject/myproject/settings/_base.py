@@ -61,6 +61,8 @@ INSTALLED_APPS = [
     "sekizai",
     "qr_code",
 
+    "myproject.apps.accounts",
+    "myproject.apps.accounts.apps.SocialDjangoConfig",
     "myproject.apps.categories",
     "myproject.apps.core",
     "myproject.apps.ideas",
@@ -228,3 +230,15 @@ for lang_code, lang_name in LANGUAGES:
     }
 lang_code_underscored = LANGUAGE_CODE.replace("-", "_")
 HAYSTACK_CONNECTIONS["default"] = HAYSTACK_CONNECTIONS[f"default_{lang_code_underscored}"]
+
+AUTHENTICATION_BACKENDS = [
+    'social_core.backends.open_id.OpenIdAuth',
+    'social_core.backends.google.GoogleOpenId',
+    'social_core.backends.google.GoogleOAuth2',
+    'social_core.backends.google.GoogleOAuth',
+    'social_core.backends.twitter.TwitterOAuth',
+    'social_core.backends.yahoo.YahooOpenId',
+    "django.contrib.auth.backends.ModelBackend",
+]
+
+SOCIAL_AUTH_JSONFIELD_ENABLED = True
