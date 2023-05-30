@@ -1,0 +1,28 @@
+{% load i18n %}
+<div class="form-row map js_map">
+    <div class="canvas">
+    </div>
+    <ul class="locations js_locations"></ul>
+    <div class="btn-group">
+        <button type="button"
+                class="btn btn-default locate-address js_locate_address">
+            {% trans "Locate address" %}
+        </button>
+        <button type="button"
+                class="btn btn-default remove-geo js_remove_geo">
+            {% trans "Remove from map" %}
+        </button>
+    </div>
+</div>
+<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey={{ key }}" type="text/javascript"></script>
+<script type="text/javascript">
+    let map = document.getElementById('map');
+    let latitude = map.getAttribute("data-latitude")
+    let longitude = map.getAttribute("data-longitude")
+    ymaps.ready(function () {
+        var map = new ymaps.Map('map', {
+            center: [longitude, latitude],
+            zoom: 10
+        });
+    });
+</script>
