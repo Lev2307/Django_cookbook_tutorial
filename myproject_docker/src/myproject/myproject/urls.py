@@ -24,7 +24,8 @@ from myproject.apps.core import views as core_views
 
 urlpatterns = i18n_patterns(
     path("", lambda request: redirect("locations:location_list")),
-    path('admin/', admin.site.urls),
+    path("admin/", include("admin_honeypot.urls", namespace="admin_honeypot")),
+    path("management/", admin.site.urls),
     path('accounts/', include("django.contrib.auth.urls")),
     path("ideas/", include(("myproject.apps.ideas.urls", "ideas"), namespace="ideas")),
     path("locations/", include(("myproject.apps.locations.urls", "locations"), namespace="locations")),

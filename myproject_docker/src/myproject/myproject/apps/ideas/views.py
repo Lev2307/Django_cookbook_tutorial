@@ -1,3 +1,7 @@
+import os
+
+from django.http import FileResponse, HttpResponseNotFound
+from django.utils.text import slugify
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
@@ -5,7 +9,6 @@ from django.views.generic import ListView, DetailView, View
 from django.forms import modelformset_factory
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.template.loader import render_to_string
-from django.utils.functional import LazyObject
 
 from .models import Idea, IdeaTranslations, RATING_CHOICES
 from .forms import IdeaForm, IdeaTranslationsForm, IdeaFilterForm
@@ -205,3 +208,23 @@ def idea_handout_pdf(request, pk):
 
 #     context = {"form": form, "facets": facets, "object_list": page}
 #     return render(request, "ideas/idea_list.html", context)
+
+@login_required
+def download_idea_picture(request, pk):
+    idea = get_object_or_404(Idea, pk=pk)
+    if idea.picture:
+        filename, extension = os.path.splitext(idea.picture.file.name)
+        extension = extension[1:]  # remove the dot
+        response = FileResponse(
+            idea.picture.file, content_type=f"image/{extension}"
+        )
+        slug = slugify(idea.title)[:100]
+        response["Content-Disposition"] = (
+            "attachment; filename="
+            f"{slug}.{extension}"
+        )
+    else:
+        response = HttpResponseNotFound(
+            content="Picture unavailable"
+        )
+    return response

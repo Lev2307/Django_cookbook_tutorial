@@ -13,6 +13,10 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import os
 from django.core.exceptions import ImproperlyConfigured
 
+from myproject.apps.auth_extra.password_validation import (
+    SpecialCharacterInclusionValidator
+)
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -53,6 +57,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.forms',
 
+
+    "myproject.apps.admin_honeypot_fix.apps.AdminHoneypotConfig",
     "crispy_forms",
     "django_json_ld",
     "haystack",
@@ -133,18 +139,31 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        "NAME": "django.contrib.auth.password_validation."
+        "UserAttributeSimilarityValidator",
+        "OPTIONS": {"max_similarity": 0.5},
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        "NAME": "django.contrib.auth.password_validation." "MinimumLengthValidator",
+        "OPTIONS": {"min_length": 12},
+    },
+    {"NAME": "django.contrib.auth.password_validation." "CommonPasswordValidator"},
+    {"NAME": "django.contrib.auth.password_validation." "NumericPasswordValidator"},
+    {
+        "NAME": "myproject.apps.auth_extra.password_validation."
+        "MaximumLengthValidator",
+        "OPTIONS": {"max_length": 32},
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        "NAME": "myproject.apps.auth_extra.password_validation."
+        "SpecialCharacterInclusionValidator",
+        "OPTIONS": {
+            "special_chars": ("{", "}", "^", "&")
+            + SpecialCharacterInclusionValidator.DEFAULT_SPECIAL_CHARACTERS
+        },
     },
 ]
+
 AUTH_USER_MODEL = "accounts.User"
 
 YANDEX_MAPS_API_KEY = get_secret("YANDEX_MAPS_API_KEY")
