@@ -106,7 +106,7 @@ TEMPLATES = [
                 "sekizai.context_processors.sekizai",
                 "myproject.apps.core.context_processors.website_url",
                 "myproject.apps.core.context_processors.yandex_maps",
-
+                "myproject.apps.external_auth.context_processors.auth0",
             ],
         },
     },
@@ -252,13 +252,17 @@ lang_code_underscored = LANGUAGE_CODE.replace("-", "_")
 HAYSTACK_CONNECTIONS["default"] = HAYSTACK_CONNECTIONS[f"default_{lang_code_underscored}"]
 
 AUTHENTICATION_BACKENDS = [
-    'social_core.backends.open_id.OpenIdAuth',
-    'social_core.backends.google.GoogleOpenId',
-    'social_core.backends.google.GoogleOAuth2',
-    'social_core.backends.google.GoogleOAuth',
-    'social_core.backends.twitter.TwitterOAuth',
-    'social_core.backends.yahoo.YahooOpenId',
+    "myproject.apps.external_auth.backends.Auth0",
     "django.contrib.auth.backends.ModelBackend",
 ]
 
 SOCIAL_AUTH_JSONFIELD_ENABLED = True
+
+SOCIAL_AUTH_AUTH0_DOMAIN = get_secret("AUTH0_DOMAIN")
+SOCIAL_AUTH_AUTH0_KEY = get_secret("AUTH0_KEY")
+SOCIAL_AUTH_AUTH0_SECRET = get_secret("AUTH0_SECRET")
+SOCIAL_AUTH_AUTH0_SCOPE = ["openid", "profile", "email"]
+SOCIAL_AUTH_TRAILING_SLASH = False
+
+LOGIN_URL = "/login/auth0"
+LOGIN_REDIRECT_URL = "dashboard"

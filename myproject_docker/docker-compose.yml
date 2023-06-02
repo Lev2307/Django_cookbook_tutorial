@@ -36,6 +36,10 @@ services:
       EMAIL_HOST_USER: "${EMAIL_HOST_USER}"
       EMAIL_HOST_PASSWORD: "${EMAIL_HOST_PASSWORD}"
       YANDEX_MAPS_API_KEY: "${YANDEX_MAPS_API_KEY}"
+      AUTH0_DOMAIN: "${AUTH0_DOMAIN}"
+      AUTH0_KEY: "${AUTH0_KEY}"
+      AUTH0_SECRET: "${AUTH0_SECRET}"
+
 
   db:
     image: kartoza/postgis:12.0

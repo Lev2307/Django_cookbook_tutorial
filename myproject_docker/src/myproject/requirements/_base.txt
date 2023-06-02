@@ -26,6 +26,8 @@ pilkit==2.0
 Pillow==9.0.0
 psycopg2-binary==2.8.3
 pycparser==2.19
+python-jose==3.0
+python-dotenv==0.9
 Pyphen==0.9.5
 python-dateutil==2.8.0
 pytz==2019.2

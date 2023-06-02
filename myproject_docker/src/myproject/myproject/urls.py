@@ -21,9 +21,15 @@ from django.conf.urls.static import static
 from django.shortcuts import redirect
 from myproject.apps.core import views as core_views
 
+from myproject.apps.external_auth import views as external_auth_views
+
 
 urlpatterns = i18n_patterns(
-    path("", lambda request: redirect("locations:location_list")),
+    path("", external_auth_views.index, name="index"),
+    path("dashboard/", external_auth_views.dashboard, name="dashboard"),
+    path("logout/", external_auth_views.logout, name="auth0_logout"),
+    path("", include("social_django.urls")),
+    # path("", lambda request: redirect("locations:location_list")),
     path("admin/", include("admin_honeypot.urls", namespace="admin_honeypot")),
     path("management/", admin.site.urls),
     path('accounts/', include("django.contrib.auth.urls")),

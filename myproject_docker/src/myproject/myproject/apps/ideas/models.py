@@ -13,6 +13,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 
 from myproject.apps.core.models import UrlBase, CreationModificationDateBase
+from myproject.apps.core.processors import WatermarkOverlay
 
 from myproject.apps.core.model_fields import (
     MultilingualCharField,
@@ -113,6 +114,17 @@ class Idea(CreationModificationDateBase, UrlBase):
     picture_thumnail = ImageSpecField(
         source="picture",
         processors=[ResizeToFill(728, 250)],
+        format="PNG"
+    )
+
+    watermarked_picture_large = ImageSpecField(
+        source="picture",
+        processors=[
+            ResizeToFill(800, 400),
+            WatermarkOverlay(
+                watermark_image=os.path.join(settings.STATIC_ROOT, 'site', 'img', 'watermark.png'),
+            )
+        ],
         format="PNG"
     )
 
