@@ -11,7 +11,6 @@ services:
       - media_volume:/home/myproject/media
     depends_on:
       - gunicorn
-
   gunicorn:
     build:
       context: .
@@ -39,6 +38,7 @@ services:
       AUTH0_DOMAIN: "${AUTH0_DOMAIN}"
       AUTH0_KEY: "${AUTH0_KEY}"
       AUTH0_SECRET: "${AUTH0_SECRET}"
+      CACHE_LOCATION: "${CACHE_LOCATION}"
 
 
   db:

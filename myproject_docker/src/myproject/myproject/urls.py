@@ -38,6 +38,7 @@ urlpatterns = i18n_patterns(
     path("news/", include(("myproject.apps.news.urls", "news"), namespace="news")),
     path("likes/", include(("myproject.apps.likes.urls", "likes"), namespace="likes")),
     path("search/", include("haystack.urls")),
+    path("videos/", include("myproject.apps.viral_videos.urls")),
     path("js-settings/", core_views.js_settings, name="js_settings"),
 )
 

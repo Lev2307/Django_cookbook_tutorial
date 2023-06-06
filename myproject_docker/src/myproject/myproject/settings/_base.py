@@ -61,8 +61,10 @@ INSTALLED_APPS = [
     "myproject.apps.admin_honeypot_fix.apps.AdminHoneypotConfig",
     "crispy_forms",
     "django_json_ld",
+    "django_mptt_admin",
     "haystack",
     "imagekit",
+    "mptt",
     "ordered_model",
     "sekizai",
     "qr_code",
@@ -70,6 +72,8 @@ INSTALLED_APPS = [
     "myproject.apps.accounts",
     "myproject.apps.accounts.apps.SocialDjangoConfig",
     "myproject.apps.categories",
+    "myproject.apps.categories1",
+    "myproject.apps.categories2",
     "myproject.apps.core",
     "myproject.apps.ideas",
     "myproject.apps.search",
@@ -77,6 +81,7 @@ INSTALLED_APPS = [
     "myproject.apps.likes",
     "myproject.apps.news",
     "myproject.apps.products",
+    "myproject.apps.viral_videos"
 ]
 
 MIDDLEWARE = [
@@ -266,3 +271,19 @@ SOCIAL_AUTH_TRAILING_SLASH = False
 
 LOGIN_URL = "/login/auth0"
 LOGIN_REDIRECT_URL = "dashboard"
+
+CACHES = {
+    "memcached": {
+        "BACKEND": "django.core.cache.backends.memcached.MemcachedCache",
+        "LOCATION": get_secret("CACHE_LOCATION"),
+        "TIMEOUT": 60,  # 1 minute
+        "KEY_PREFIX": "myproject",
+    },
+    "redis": {
+        "BACKEND": "redis_cache.RedisCache",
+        "LOCATION": [get_secret("CACHE_LOCATION")],
+        "TIMEOUT": 60,  # 1 minute
+        "KEY_PREFIX": "myproject",
+    },
+}
+CACHES["default"] = CACHES["memcached"]

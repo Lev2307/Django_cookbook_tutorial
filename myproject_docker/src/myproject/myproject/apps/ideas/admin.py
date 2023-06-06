@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from myproject.apps.core.admin import get_multilingual_field_names
 from .models import Idea, IdeaTranslations
 from myproject.apps.core.admin import LanguageChoicesForm
-from myproject.apps.categories.models import Category
+from myproject.apps.categories1.models import Category
 
 class IdeaTranslationsForm(LanguageChoicesForm):
     class Meta:

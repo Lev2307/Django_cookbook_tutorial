@@ -4,6 +4,7 @@ import os
 
 from imagekit.models import ImageSpecField
 from pilkit.processors import ResizeToFill
+from mptt.fields import TreeManyToManyField
 
 from django.db import models
 from django.urls import reverse
@@ -80,11 +81,17 @@ class Idea(CreationModificationDateBase, UrlBase):
         null=True,
         related_name="authored_ideas",
     )
-    categories = models.ManyToManyField(
+    
+    categories_m2m = models.ManyToManyField(
         "categories.Category",
-        verbose_name=_("Categories"),
+        verbose_name=_("Categories m2m"),
         related_name="category_ideas",
     )
+    categories = TreeManyToManyField(
+        "categories1.Category",
+        verbose_name=_("Categories"),
+    )
+
     rating = models.PositiveIntegerField(
         _("Rating"), choices=RATING_CHOICES, blank=True, null=True
     )

@@ -14,6 +14,8 @@ django-elasticsearch-dsl==7.1.4
 django-haystack==3.0
 django-imagekit==4.0.2
 django-json-ld==0.0.4
+django-mptt==0.10.0
+django-mptt-admin==0.7.2
 django_ordered_model==3.7.4
 django-sekizai==1.0.0
 django-qr-code==2.1.0
@@ -30,6 +32,7 @@ python-jose==3.0
 python-dotenv==0.9
 Pyphen==0.9.5
 python-dateutil==2.8.0
+python-memcached==1.59
 pytz==2019.2
 qrcode==6.1
 requests==2.22.0
