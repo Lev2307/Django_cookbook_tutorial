@@ -1,3 +1,9 @@
-from django.shortcuts import render
+from django.views.generic import ListView
 
-# Create your views here.
+from .models import Category
+
+
+class IdeaCategoryList(ListView):
+    model = Category
+    template_name = "categories1/category_list.html"
+    context_object_name = "categories"

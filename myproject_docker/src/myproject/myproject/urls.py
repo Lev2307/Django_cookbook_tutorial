@@ -21,6 +21,8 @@ from django.conf.urls.static import static
 from django.shortcuts import redirect
 from myproject.apps.core import views as core_views
 
+from myproject.apps.categories1 import views as categories_views
+
 from myproject.apps.external_auth import views as external_auth_views
 
 
@@ -34,6 +36,7 @@ urlpatterns = i18n_patterns(
     path("management/", admin.site.urls),
     path('accounts/', include("django.contrib.auth.urls")),
     path("ideas/", include(("myproject.apps.ideas.urls", "ideas"), namespace="ideas")),
+    path("idea-categories/", categories_views.IdeaCategoryList.as_view(), name="idea_categories"),
     path("locations/", include(("myproject.apps.locations.urls", "locations"), namespace="locations")),
     path("news/", include(("myproject.apps.news.urls", "news"), namespace="news")),
     path("likes/", include(("myproject.apps.likes.urls", "likes"), namespace="likes")),

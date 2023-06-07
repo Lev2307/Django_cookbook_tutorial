@@ -1,8 +1,9 @@
 {% extends "base.html" %}
-{% load i18n utility_tags %}
+{% load i18n utility_tags crispy_forms_tags %}
 
 {% block sidebar %}
     {% include "ideas/includes/filters.html" %}
+    {% crispy form %}
 {% endblock %}
 
 {% block main %}
