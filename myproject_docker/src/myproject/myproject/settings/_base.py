@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     "mptt",
     "ordered_model",
     "sekizai",
+    "treebeard",
     "qr_code",
 
     "myproject.apps.accounts",

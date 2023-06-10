@@ -87,9 +87,15 @@ class Idea(CreationModificationDateBase, UrlBase):
         verbose_name=_("Categories m2m"),
         related_name="category_ideas",
     )
-    categories = TreeManyToManyField(
+
+    categories_django_mptt = TreeManyToManyField(
         "categories1.Category",
-        verbose_name=_("Categories"),
+        verbose_name=_("Categories django-mptt"),
+    )
+    
+    categories_treebeard = models.ManyToManyField(
+        "categories2.Category",
+        verbose_name=_("Categories treebeard"),
     )
 
     rating = models.PositiveIntegerField(
