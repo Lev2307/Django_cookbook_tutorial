@@ -77,6 +77,7 @@ INSTALLED_APPS = [
     "myproject.apps.categories2",
     "myproject.apps.core",
     "myproject.apps.ideas",
+    "myproject.apps.music",
     "myproject.apps.search",
     "myproject.apps.locations",
     "myproject.apps.likes",
