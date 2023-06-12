@@ -39,6 +39,7 @@ services:
       AUTH0_KEY: "${AUTH0_KEY}"
       AUTH0_SECRET: "${AUTH0_SECRET}"
       CACHE_LOCATION: "${CACHE_LOCATION}"
+      LAST_FM_API_KEY: "${LAST_FM_API_KEY}"
 
 
   db:

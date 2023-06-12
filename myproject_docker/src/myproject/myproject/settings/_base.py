@@ -289,3 +289,5 @@ CACHES = {
     },
 }
 CACHES["default"] = CACHES["memcached"]
+
+LAST_FM_API_KEY = get_secret("LAST_FM_API_KEY")

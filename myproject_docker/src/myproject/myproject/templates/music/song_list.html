@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+
+{% block content %}
+    {% if object_list.count > 1 %}
+        {% for song in object_list %}
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title">
+                        <h1>{{ song.title }}</h1>
+                    </div>
+                    <div class="card-subtitle">
+                        <h2>{{ song.artist }}</h2>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <img src="{{ song.image.url }}" alt="" />
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endblock %}
