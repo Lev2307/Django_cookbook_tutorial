@@ -56,6 +56,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.forms',
+    "django.contrib.sitemaps",
+
 
 
     "myproject.apps.admin_honeypot_fix.apps.AdminHoneypotConfig",

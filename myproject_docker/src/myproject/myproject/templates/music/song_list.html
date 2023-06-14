@@ -1,22 +1,23 @@
-{% extends 'base.html' %}
-{% load i18n static %}
+{% extends "base.html" %}
+{% load i18n %}
 
-{% block content %}
-    {% if object_list.count > 1 %}
+{% block sidebar %}
+    <form action="" method="get">
+        {{ form.errors }}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">{% trans "Filter" %}</button>
+    </form>
+    {% url "music:song_rss" as songs_rss_url %}
+    <p>
+        <a href="{{ songs_rss_url }}?{{ request.META.QUERY_STRING }}">{% trans "Subscribe to RSS feed" %}</a>
+    </p>
+
+{% endblock %}
+
+{% block main %}
+    <ul>
         {% for song in object_list %}
-            <div class="card">
-                <div class="card-body">
-                    <div class="card-title">
-                        <h1>{{ song.title }}</h1>
-                    </div>
-                    <div class="card-subtitle">
-                        <h2>{{ song.artist }}</h2>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <img src="{{ song.image.url }}" alt="" />
-                </div>
-            </div>
+            <li><a href="{{ song.get_url_path }}">{{ song }}</a></li>
         {% endfor %}
-    {% endif %}
+    </ul>
 {% endblock %}

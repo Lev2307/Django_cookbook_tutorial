@@ -19,14 +19,37 @@ from django.urls import include, path
 from django.conf import settings
 from django.conf.urls.static import static
 from django.shortcuts import redirect
+from django.contrib.sitemaps import views as sitemaps_views
+from django.contrib.sitemaps import GenericSitemap
+
 from myproject.apps.core import views as core_views
 
 from myproject.apps.categories1 import views as categories_views
 
 from myproject.apps.external_auth import views as external_auth_views
+from myproject.apps.music.models import Song
 
 
-urlpatterns = i18n_patterns(
+
+class MySitemap(GenericSitemap):
+    limit = 50
+
+    def location(self, obj):
+        return obj.get_url_path()
+
+song_info_dict = {
+    "queryset": Song.objects.all(),
+    "date_field": "modified",
+}
+
+sitemaps = {"music": MySitemap(song_info_dict, priority=1.0)}
+
+urlpatterns = [
+    path("sitemap.xml", sitemaps_views.index, {"sitemaps": sitemaps}),
+    path("sitemap-<str:section>.xml", sitemaps_views.sitemap, {"sitemaps": sitemaps}, name="django.contrib.sitemaps.views.sitemap"),
+]
+
+urlpatterns += i18n_patterns(
     path("", external_auth_views.index, name="index"),
     path("dashboard/", external_auth_views.dashboard, name="dashboard"),
     path("logout/", external_auth_views.logout, name="auth0_logout"),
@@ -41,7 +64,7 @@ urlpatterns = i18n_patterns(
     path("news/", include(("myproject.apps.news.urls", "news"), namespace="news")),
     path("likes/", include(("myproject.apps.likes.urls", "likes"), namespace="likes")),
     path("search/", include("haystack.urls")),
-    path("songs/", include("myproject.apps.music.urls")),
+    path("songs/", include(("myproject.apps.music.urls", "music"), namespace="music")),
     path("videos/", include("myproject.apps.viral_videos.urls")),
     path("js-settings/", core_views.js_settings, name="js_settings"),
 )
