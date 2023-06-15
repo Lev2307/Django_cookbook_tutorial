@@ -28,6 +28,7 @@ from myproject.apps.categories1 import views as categories_views
 
 from myproject.apps.external_auth import views as external_auth_views
 from myproject.apps.music.models import Song
+from myproject.apps.music.views import RESTSongList, RESTSongDetail
 
 
 
@@ -67,6 +68,9 @@ urlpatterns += i18n_patterns(
     path("songs/", include(("myproject.apps.music.urls", "music"), namespace="music")),
     path("videos/", include("myproject.apps.viral_videos.urls")),
     path("js-settings/", core_views.js_settings, name="js_settings"),
+    path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
+    path("rest-api/songs/", RESTSongList.as_view(), name="rest_song_list"),
+    path("rest-api/songs/<uuid:pk>/", RESTSongDetail.as_view(), name="rest_song_detail"),
 )
 
 urlpatterns += [

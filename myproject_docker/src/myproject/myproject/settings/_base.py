@@ -71,6 +71,7 @@ INSTALLED_APPS = [
     "sekizai",
     "treebeard",
     "qr_code",
+    "rest_framework",
 
     "myproject.apps.accounts",
     "myproject.apps.accounts.apps.SocialDjangoConfig",
@@ -293,3 +294,10 @@ CACHES = {
 CACHES["default"] = CACHES["memcached"]
 
 LAST_FM_API_KEY = get_secret("LAST_FM_API_KEY")
+
+REST_FRAMEWORK = {
+ "DEFAULT_PERMISSION_CLASSES": [ "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly"],
+ "DEFAULT_PAGINATION_CLASS":
+ "rest_framework.pagination.LimitOffsetPagination",
+ "PAGE_SIZE": 50,
+}

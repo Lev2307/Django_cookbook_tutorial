@@ -3,7 +3,9 @@ from django.http import Http404
 from django.views.generic import ListView, DetailView, FormView
 from django.utils.translation import ugettext_lazy as _
 
+from rest_framework import generics
 
+from .serializers import SongSerializer
 from .models import Song
 from .forms import SongFilterForm
 
@@ -47,3 +49,18 @@ class SongList(ListView, FormView):
 
 class SongDetail(DetailView):
     model = Song
+
+class RESTSongList(generics.ListCreateAPIView):
+    queryset = Song.objects.all()
+    serializer_class = SongSerializer
+
+    def get_view_name(self):
+        return "Song List"
+
+
+class RESTSongDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Song.objects.all()
+    serializer_class = SongSerializer
+
+    def get_view_name(self):
+        return "Song Detail"
