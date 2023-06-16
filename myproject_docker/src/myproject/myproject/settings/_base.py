@@ -301,3 +301,17 @@ REST_FRAMEWORK = {
  "rest_framework.pagination.LimitOffsetPagination",
  "PAGE_SIZE": 50,
 }
+
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "file": {
+            "level": "DEBUG",
+            "class": "logging.FileHandler",
+            "filename": os.path.join(BASE_DIR, "tmp", "debug.log"),
+        },
+    },
+    "loggers": {"django": {"handlers": ["file"], "level": "DEBUG", "propagate": True}},
+}

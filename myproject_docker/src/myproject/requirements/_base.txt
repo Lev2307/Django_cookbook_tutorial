@@ -1,4 +1,5 @@
 asgiref==3.3.1
+bpython==0.18
 cairocffi==1.1.0
 CairoSVG==2.5.1
 certifi==2020.12.5
@@ -25,6 +26,8 @@ elasticsearch==7.11.0
 elasticsearch-dsl==7.3.0
 gunicorn==20.0.4
 html5lib==1.0.1
+ipython==7.10.2
+ipython-genutils==0.2.0
 openpyxl==3.0.10
 pilkit==2.0
 Pillow==9.0.0

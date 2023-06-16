@@ -66,7 +66,7 @@ urlpatterns += i18n_patterns(
     path("likes/", include(("myproject.apps.likes.urls", "likes"), namespace="likes")),
     path("search/", include("haystack.urls")),
     path("songs/", include(("myproject.apps.music.urls", "music"), namespace="music")),
-    path("videos/", include("myproject.apps.viral_videos.urls")),
+    path("viral_videos/", include("myproject.apps.viral_videos.urls")),
     path("js-settings/", core_views.js_settings, name="js_settings"),
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
     path("rest-api/songs/", RESTSongList.as_view(), name="rest_song_list"),
