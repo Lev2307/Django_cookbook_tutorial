@@ -62,6 +62,7 @@ INSTALLED_APPS = [
 
     "myproject.apps.admin_honeypot_fix.apps.AdminHoneypotConfig",
     "crispy_forms",
+    "debug_toolbar",
     "django_json_ld",
     "django_mptt_admin",
     "haystack",
@@ -79,6 +80,7 @@ INSTALLED_APPS = [
     "myproject.apps.categories1",
     "myproject.apps.categories2",
     "myproject.apps.core",
+    "myproject.apps.guerrilla_patches",
     "myproject.apps.ideas",
     "myproject.apps.music",
     "myproject.apps.search",
@@ -98,6 +100,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware'
 ]
 
 ROOT_URLCONF = 'myproject.urls'
@@ -301,6 +304,27 @@ REST_FRAMEWORK = {
  "rest_framework.pagination.LimitOffsetPagination",
  "PAGE_SIZE": 50,
 }
+
+DEBUG_TOOLBAR_CONFIG = {
+    "DISABLE_PANELS": [],
+    "SHOW_TOOLBAR_CALLBACK": "myproject.apps.core.misc.custom_show_toolbar",
+    "SHOW_TEMPLATE_CONTEXT": True,
+}
+
+DEBUG_TOOLBAR_PANELS = [
+    "debug_toolbar.panels.versions.VersionsPanel",
+    "debug_toolbar.panels.timer.TimerPanel",
+    "debug_toolbar.panels.settings.SettingsPanel",
+    "debug_toolbar.panels.headers.HeadersPanel",
+    "debug_toolbar.panels.request.RequestPanel",
+    "debug_toolbar.panels.sql.SQLPanel",
+    "debug_toolbar.panels.templates.TemplatesPanel",
+    "debug_toolbar.panels.staticfiles.StaticFilesPanel",
+    "debug_toolbar.panels.cache.CachePanel",
+    "debug_toolbar.panels.signals.SignalsPanel",
+    "debug_toolbar.panels.logging.LoggingPanel",
+    "debug_toolbar.panels.redirects.RedirectsPanel",
+]
 
 
 LOGGING = {

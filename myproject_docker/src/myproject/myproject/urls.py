@@ -22,6 +22,9 @@ from django.shortcuts import redirect
 from django.contrib.sitemaps import views as sitemaps_views
 from django.contrib.sitemaps import GenericSitemap
 
+import debug_toolbar
+
+
 from myproject.apps.core import views as core_views
 
 from myproject.apps.categories1 import views as categories_views
@@ -29,6 +32,7 @@ from myproject.apps.categories1 import views as categories_views
 from myproject.apps.external_auth import views as external_auth_views
 from myproject.apps.music.models import Song
 from myproject.apps.music.views import RESTSongList, RESTSongDetail
+
 
 
 
@@ -52,6 +56,7 @@ urlpatterns = [
 
 urlpatterns += i18n_patterns(
     path("", external_auth_views.index, name="index"),
+    path('__debug__/', include(debug_toolbar.urls)),
     path("dashboard/", external_auth_views.dashboard, name="dashboard"),
     path("logout/", external_auth_views.logout, name="auth0_logout"),
     path("", include("social_django.urls")),
