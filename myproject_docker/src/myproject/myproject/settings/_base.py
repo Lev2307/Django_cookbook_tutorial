@@ -100,7 +100,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware'
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    "myproject.apps.core.middleware.ThreadLocalMiddleware",
 ]
 
 ROOT_URLCONF = 'myproject.urls'
@@ -339,3 +340,5 @@ LOGGING = {
     },
     "loggers": {"django": {"handlers": ["file"], "level": "DEBUG", "propagate": True}},
 }
+
+ADMINS = [("admin adminov", "abrosimowlev@yandex.ru")]

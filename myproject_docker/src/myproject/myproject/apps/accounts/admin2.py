@@ -28,6 +28,7 @@ class MyUserAdmin(UserAdmin):
     save_on_top = True
     list_display = [
         "get_avatar",
+        "username",
         "get_full_name",
         "download_gravatar",
         "is_active",

@@ -111,10 +111,11 @@ class IdeaListView(View):
     template_name = "ideas/idea_list.html"
 
     def get(self, request, *args, **kwargs):
+        from myproject.apps.core.middleware import get_current_user
         form = self.form_class(data=request.GET)
         qs, facets = self.get_queryset_and_facets(form)
         page = self.get_page(request, qs)
-        context = {"form": form, "facets": facets, "object_list": page, "request": request}
+        context = {"form": form, "facets": facets, "object_list": page, "request": request, "curr_user": get_current_user()}
         return render(request, self.template_name, context)
 
 
@@ -162,6 +163,7 @@ class IdeaListView(View):
         except EmptyPage:
             page = paginator.page(paginator.num_pages)
         return page
+
 
 def idea_handout_pdf(request, pk):
     from django.utils.timezone import now as timezone_now

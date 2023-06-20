@@ -1,6 +1,9 @@
 from django.apps import AppConfig
+from django.utils.translation import ugettext_lazy as _
 
-
-class ViralVideosConfig(AppConfig):
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'viral_videos'
+class ViralVideosAppConfig(AppConfig):
+    name = "myproject.apps.viral_videos"
+    verbose_name = _("Viral Videos")
+    
+    def ready(self):
+        from .signals import inform_administrators
