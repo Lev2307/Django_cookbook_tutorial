@@ -7,3 +7,4 @@ class ViralVideosAppConfig(AppConfig):
     
     def ready(self):
         from .signals import inform_administrators
+        from .checks import settings_check
