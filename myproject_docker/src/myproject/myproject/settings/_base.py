@@ -288,12 +288,6 @@ CACHES = {
         "TIMEOUT": 60,  # 1 minute
         "KEY_PREFIX": "myproject",
     },
-    "redis": {
-        "BACKEND": "redis_cache.RedisCache",
-        "LOCATION": [get_secret("CACHE_LOCATION")],
-        "TIMEOUT": 60,  # 1 minute
-        "KEY_PREFIX": "myproject",
-    },
 }
 CACHES["default"] = CACHES["memcached"]
 
