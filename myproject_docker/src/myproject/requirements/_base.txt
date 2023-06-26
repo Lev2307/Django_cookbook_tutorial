@@ -4,7 +4,6 @@ cairocffi==1.1.0
 CairoSVG==2.5.1
 certifi==2020.12.5
 cffi==1.12.3
-cookiecutter~=1.7.0
 cssselect2==0.2.2
 defusedxml==0.6.0
 Django==3.0.13
